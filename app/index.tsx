@@ -1,4 +1,4 @@
-import LoginScreen from "@/features/auth/login_screen";
+import LoginScreen from "@/features/auth/screens/login_screen";
 import OnboardingScreen from "@/features/onboarding/screens/onboarding_screen";
 import SplashScreen from "@/features/onboarding/screens/splash_screen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -8,7 +8,7 @@ const stack = createNativeStackNavigator<RootParams>();
 
 export default function App() {
   return (
-    <stack.Navigator initialRouteName="SplashRoute">
+    <stack.Navigator initialRouteName="LoginRoute">
       <stack.Screen
         name="SplashRoute"
         component={SplashScreen}

@@ -1,5 +1,7 @@
 import { COLORS } from "@/app/constants/app_colors";
-import React, { useRef } from "react";
+import { RootParams } from "@/app/navigation";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import React, { useRef, useState } from "react";
 import {
   Dimensions,
   Image,
@@ -12,14 +14,7 @@ import {
 
 const { width } = Dimensions.get("window");
 
-interface OnboardingItem {
-  id: number;
-  image: any;
-  title: string;
-  description: string;
-}
-
-const onboardingData: OnboardingItem[] = [
+const onboardingData = [
   {
     id: 1,
     image: require("@/assets/images/onboarding1.png"),
@@ -43,12 +38,32 @@ const onboardingData: OnboardingItem[] = [
   },
 ];
 
-export default function OnboardingScreen() {
+type Props = NativeStackScreenProps<RootParams, "OnBoardingRoute">;
+
+export default function OnboardingScreen({ navigation }: Props) {
   const scrollViewRef = useRef<ScrollView>(null);
+  const [currentIndex, setIndex] = useState(0);
+
+  const handleNext = () => {
+    if (currentIndex < onboardingData.length - 1) {
+      const nextIndex = currentIndex + 1;
+      scrollViewRef.current?.scrollTo({
+        x: nextIndex * width,
+        animated: true,
+      });
+    } else {
+      navigation.replace("LoginRoute");
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.skipButton} onPress={() => {}}>
+      <TouchableOpacity
+        style={styles.skipButton}
+        onPress={() => {
+          navigation.replace("LoginRoute");
+        }}
+      >
         <Text style={styles.skipText}>Skip</Text>
       </TouchableOpacity>
 
@@ -56,10 +71,10 @@ export default function OnboardingScreen() {
         ref={scrollViewRef}
         horizontal
         pagingEnabled
-        scrollEventThrottle={16}
         onScroll={(scroll) => {
           const scrollPosition = scroll.nativeEvent.contentOffset.x;
           const index = Math.round(scrollPosition / width);
+          setIndex(index);
         }}
         scrollIndicatorInsets={{ right: 1 }}
         showsHorizontalScrollIndicator={false}
@@ -78,17 +93,29 @@ export default function OnboardingScreen() {
       </ScrollView>
 
       <View style={styles.dotsContainer}>
-        {onboardingData.map((item) => (
-          <View key={item.id} style={styles.dot} />
+        {onboardingData.map((item, index) => (
+          <View
+            key={item.id}
+            style={[styles.dot, index === currentIndex && styles.activeDot]}
+          />
         ))}
       </View>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.primaryButton} onPress={() => {}}>
-          <Text style={styles.buttonText}>Continue</Text>
+        <TouchableOpacity style={styles.primaryButton} onPress={handleNext}>
+          {currentIndex === onboardingData.length - 1 ? (
+            <Text style={styles.buttonText}>Get Started</Text>
+          ) : (
+            <Text style={styles.buttonText}>Next</Text>
+          )}
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => {}} style={styles.signInButton}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.replace("LoginRoute");
+          }}
+          style={styles.signInButton}
+        >
           <Text style={styles.signInText}>Sign in</Text>
         </TouchableOpacity>
       </View>
@@ -147,6 +174,12 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: COLORS.lightGray,
     marginHorizontal: 4,
+  },
+  activeDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: COLORS.primary,
   },
   buttonContainer: {
     paddingHorizontal: 24,
