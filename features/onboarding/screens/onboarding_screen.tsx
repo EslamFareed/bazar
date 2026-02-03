@@ -125,6 +125,7 @@ export default function OnboardingScreen({ navigation }: Props) {
 
 const styles = StyleSheet.create({
   container: {
+    paddingVertical:25,
     flex: 1,
     backgroundColor: COLORS.background,
   },

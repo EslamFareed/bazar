@@ -1,14 +1,19 @@
 import { COLORS } from "@/app/constants/app_colors";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, ViewStyle } from "react-native";
 
 interface PrimaryButtonParams {
   title: string;
   onPress: () => void;
+  style?: ViewStyle;
 }
 
-export default function PrimaryButton({ title, onPress }: PrimaryButtonParams) {
+export default function PrimaryButton({
+  title,
+  onPress,
+  style,
+}: PrimaryButtonParams) {
   return (
-    <TouchableOpacity style={styles.btn} onPress={onPress}>
+    <TouchableOpacity style={[styles.btn, style]} onPress={onPress}>
       <Text style={styles.txt}>{title}</Text>
     </TouchableOpacity>
   );

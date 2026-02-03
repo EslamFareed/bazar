@@ -1,7 +1,5 @@
 import { COLORS } from "@/app/constants/app_colors";
 import { RootParams } from "@/app/navigation";
-import { FontAwesome } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useState } from "react";
 import {
@@ -16,47 +14,44 @@ import {
 import InputField from "../components/input_field";
 import PrimaryButton from "../components/primary_button";
 
-type Props = NativeStackScreenProps<RootParams, "LoginRoute">;
+type Props = NativeStackScreenProps<RootParams, "RegisterRoute">;
 
-export default function LoginScreen({ navigation }: Props) {
+export default function RegisterScreen({ navigation }: Props) {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const login = async () => {
-    if (!email || !password) {
+  const register = async () => {
+    if (!email || !password || !name) {
       Alert.alert("Please Enter Email and password");
       return;
     }
     try {
       setIsLoading(true);
       const response = await fetch(
-        "http://oman.somee.com/ecommerce_publish/Identity/Accounts/Login",
+        "http://oman.somee.com/ecommerce_publish/Identity/Accounts/Register",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            emailOrUserName: email,
+            name: name,
+            email: email,
             password: password,
-            rememberMe: true,
+            confirmPassword: password,
           }),
         },
       );
 
       if (response.ok) {
-        const data = await response.json();
-
-        const token: string = data.token;
-        await AsyncStorage.setItem("token", token);
-
-        navigation.replace("HomeRoute");
+        navigation.replace("RegisterSuccessRoute");
       } else {
-        Alert.alert("Login Failed");
+        Alert.alert("Create Account Failed");
       }
     } catch {
-      Alert.alert("Login Failed");
+      Alert.alert("Create Account Failed");
     } finally {
       setIsLoading(false);
     }
@@ -65,11 +60,21 @@ export default function LoginScreen({ navigation }: Props) {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.headerSection}>
-        <Text style={styles.title}>Welcome Back</Text>
-        <Text style={styles.subtitle}>Sign to your account</Text>
+        <Text style={styles.title}>Sign Up</Text>
+        <Text style={styles.subtitle}>
+          Create account and choose favorite menu
+        </Text>
       </View>
 
       <View style={styles.formSection}>
+        <View style={styles.inputLabel}>
+          <Text style={styles.label}>Name</Text>
+        </View>
+        <InputField
+          placeHolder="Your Name"
+          value={name}
+          onChangeText={setName}
+        />
         <View style={styles.inputLabel}>
           <Text style={styles.label}>Email</Text>
         </View>
@@ -89,10 +94,6 @@ export default function LoginScreen({ navigation }: Props) {
           isPassword={true}
         />
 
-        <TouchableOpacity style={styles.forgotSection}>
-          <Text style={styles.forgotText}>Forget Password ?</Text>
-        </TouchableOpacity>
-
         {isLoading && (
           <ActivityIndicator
             style={{
@@ -102,34 +103,16 @@ export default function LoginScreen({ navigation }: Props) {
           />
         )}
 
-        {!isLoading && <PrimaryButton title="Login" onPress={login} />}
+        {!isLoading && <PrimaryButton title="Register" onPress={register} />}
 
         <View style={styles.signUpSection}>
-          <Text style={styles.signUpText}>{"Don't haave an account?"}</Text>
+          <Text style={styles.signUpText}>{"Have an account?"}</Text>
           <TouchableOpacity
             onPress={() => {
-              navigation.replace("RegisterRoute");
+              navigation.replace("LoginRoute");
             }}
           >
-            <Text style={styles.signUpLink}> Sign Up</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.divider}>
-          <View style={styles.dividerLine} />
-          <Text style={styles.dividerText}>Or with</Text>
-          <View style={styles.dividerLine} />
-        </View>
-
-        <View style={styles.socialContainer}>
-          <TouchableOpacity style={styles.socialButton}>
-            <FontAwesome name="google" size={20} color="#1F2937" />
-            <Text style={styles.socialText}>Sign in with Google</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.socialButton}>
-            <FontAwesome name="apple" size={20} color="#1F2937" />
-            <Text style={styles.socialText}>Sign in with Apple</Text>
+            <Text style={styles.signUpLink}> Sign In</Text>
           </TouchableOpacity>
         </View>
       </View>
