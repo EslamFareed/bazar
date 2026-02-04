@@ -1,21 +1,25 @@
-import { RootParams } from "@/app/navigation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 import { Text, TouchableOpacity, View } from "react-native";
 
-type Props = NativeStackScreenProps<RootParams, "HomeRoute">;
+export default function HomeScreen() {
+  const navigation = useNavigation();
 
-export default function HomeScreen({ navigation }: Props) {
   return (
     <View
       style={{
-        paddingVertical:25,
+        paddingVertical: 25,
       }}
     >
       <TouchableOpacity
         onPress={async () => {
           await AsyncStorage.clear();
-          navigation.replace("LoginRoute");
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{ name: "LoginRoute" }],
+            })
+          );
         }}
       >
         <Text>Log out</Text>

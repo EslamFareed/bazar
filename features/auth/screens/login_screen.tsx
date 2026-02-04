@@ -51,7 +51,7 @@ export default function LoginScreen({ navigation }: Props) {
         const token: string = data.token;
         await AsyncStorage.setItem("token", token);
 
-        navigation.replace("HomeRoute");
+        navigation.replace("MainTabs");
       } else {
         Alert.alert("Login Failed");
       }

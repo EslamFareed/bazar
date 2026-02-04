@@ -1,7 +1,7 @@
 import CreateAccountSuccessScreen from "@/features/auth/screens/ceate_account_success_screen";
 import LoginScreen from "@/features/auth/screens/login_screen";
 import RegisterScreen from "@/features/auth/screens/register_screen";
-import HomeScreen from "@/features/home/screens/home_screen";
+import MainTabs from "@/features/home/screens/main_tabs";
 import OnboardingScreen from "@/features/onboarding/screens/onboarding_screen";
 import SplashScreen from "@/features/onboarding/screens/splash_screen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -11,7 +11,8 @@ const stack = createNativeStackNavigator<RootParams>();
 
 export default function App() {
   return (
-    <stack.Navigator initialRouteName="RegisterSuccessRoute">
+    // <NavigationContainer>
+    <stack.Navigator initialRouteName="SplashRoute">
       <stack.Screen
         name="SplashRoute"
         component={SplashScreen}
@@ -48,12 +49,13 @@ export default function App() {
         }}
       />
       <stack.Screen
-        name="HomeRoute"
-        component={HomeScreen}
+        name="MainTabs"
+        component={MainTabs}
         options={{
           headerShown: false,
         }}
       />
     </stack.Navigator>
+    // </NavigationContainer>
   );
 }

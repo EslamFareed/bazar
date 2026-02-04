@@ -11,7 +11,7 @@ export default function SplashScreen({ navigation }: Props) {
   const checkLogin = async () => {
     const token = await AsyncStorage.getItem("token");
     if (token) {
-      navigation.replace("HomeRoute");
+      navigation.replace("MainTabs");
     } else {
       navigation.replace("OnBoardingRoute");
     }
