@@ -46,7 +46,7 @@ export default function AdsSlider() {
     currentIndexRef.current = index;
     setCurrentIndex(index);
   };
-const currentIndexRef = useRef(0);
+  const currentIndexRef = useRef(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -57,12 +57,14 @@ const currentIndexRef = useRef(0);
   }, []);
 
   const changeAuto = () => {
-    const nextIndex = currentIndexRef.current < adsData.length - 1
-    ? currentIndexRef.current + 1 : 0 ;
+    const nextIndex =
+      currentIndexRef.current < adsData.length - 1
+        ? currentIndexRef.current + 1
+        : 0;
 
     flatListRef.current?.scrollToIndex({
-      index:nextIndex,
-      animated:true
+      index: nextIndex,
+      animated: true,
     });
 
     currentIndexRef.current = nextIndex;
@@ -89,7 +91,7 @@ const currentIndexRef = useRef(0);
                 <Image
                   source={item.image}
                   style={styles.image}
-                  resizeMode="contain"
+                  resizeMode="cover"
                 />
               </View>
             </View>
@@ -128,8 +130,9 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     flexDirection: "row",
     alignItems: "center",
-    padding: 20,
+    paddingLeft: 20,
     height: 180,
+    overflow: "hidden",
   },
   content: {
     flex: 1,
@@ -158,13 +161,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   imageContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    width: 140,
+    height: "100%",
   },
   image: {
-    width: 100,
-    height: 150,
+    width: "100%",
+    height: "100%",
   },
   dotsContainer: {
     flexDirection: "row",
