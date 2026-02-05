@@ -9,4 +9,5 @@ export type RootParams = {
   ProfileRoute: undefined;
   CartRoute: undefined;
   CategoryRoute: undefined;
+  SearchRoute: undefined;
 };

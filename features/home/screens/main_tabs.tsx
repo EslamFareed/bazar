@@ -1,11 +1,11 @@
 import { COLORS } from "@/app/constants/app_colors";
+import { RootParams } from "@/app/navigation";
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import CartScreen from "./cart_screen";
-import CategoryScreen from "./category_screen";
+import CartScreen from "../../cart/cart_screen";
+import CategoryScreen from "../../category/category_screen";
+import ProfileScreen from "../../profile/profile_screen";
 import HomeScreen from "./home_screen";
-import ProfileScreen from "./profile_screen";
-import { RootParams } from "@/app/navigation";
 
 // export type TabParams = {
 //   Home: undefined;
@@ -22,14 +22,14 @@ export default function MainTabs() {
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: COLORS.primary,
-        tabBarInactiveTintColor: COLORS.darkGray,        
+        tabBarInactiveTintColor: COLORS.darkGray,
       }}
     >
       <Tab.Screen
         name="HomeRoute"
         component={HomeScreen}
         options={{
-          title:"Home",
+          title: "Home",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home" size={size} color={color} />
           ),
@@ -39,6 +39,7 @@ export default function MainTabs() {
         name="CategoryRoute"
         component={CategoryScreen}
         options={{
+          title: "Category",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="document-text" size={size} color={color} />
           ),
@@ -48,6 +49,7 @@ export default function MainTabs() {
         name="CartRoute"
         component={CartScreen}
         options={{
+          title: "Cart",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="cart" size={size} color={color} />
           ),
@@ -57,6 +59,7 @@ export default function MainTabs() {
         name="ProfileRoute"
         component={ProfileScreen}
         options={{
+          title: "Profile",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person" size={size} color={color} />
           ),

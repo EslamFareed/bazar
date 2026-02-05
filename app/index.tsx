@@ -6,13 +6,14 @@ import OnboardingScreen from "@/features/onboarding/screens/onboarding_screen";
 import SplashScreen from "@/features/onboarding/screens/splash_screen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RootParams } from "./navigation";
+import SearchScreen from "@/features/search/search_screen";
 
 const stack = createNativeStackNavigator<RootParams>();
 
 export default function App() {
   return (
     // <NavigationContainer>
-    <stack.Navigator initialRouteName="SplashRoute">
+    <stack.Navigator initialRouteName="MainTabs">
       <stack.Screen
         name="SplashRoute"
         component={SplashScreen}
@@ -51,6 +52,13 @@ export default function App() {
       <stack.Screen
         name="MainTabs"
         component={MainTabs}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <stack.Screen
+        name="SearchRoute"
+        component={SearchScreen}
         options={{
           headerShown: false,
         }}
