@@ -2,7 +2,7 @@ import { COLORS } from "@/app/constants/app_colors";
 import { RootParams } from "@/app/navigation";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   StyleSheet,
@@ -16,52 +16,110 @@ import BookCard from "../components/book_card";
 import BrandCard from "../components/brand_card";
 import SectionHeader from "../components/section_header";
 
-const topBooksData = [
-  {
-    id: "1",
-    title: "The Kite Runner",
-    price: "$14.99",
-    image: require("@/assets/images/ads.png"),
-  },
-  {
-    id: "2",
-    title: "The Subtle Art of Not Giving a F*ck",
-    price: "$20.99",
-    image: require("@/assets/images/ads.png"),
-  },
-  {
-    id: "3",
-    title: "The Art of War",
-    price: "$14.99",
-    image: require("@/assets/images/ads.png"),
-  },
-];
+// const topBooksData = [
+//   {
+//     id: "1",
+//     title: "The Kite Runner",
+//     price: "$14.99",
+//     image: require("@/assets/images/ads.png"),
+//   },
+//   {
+//     id: "2",
+//     title: "The Subtle Art of Not Giving a F*ck",
+//     price: "$20.99",
+//     image: require("@/assets/images/ads.png"),
+//   },
+//   {
+//     id: "3",
+//     title: "The Art of War",
+//     price: "$14.99",
+//     image: require("@/assets/images/ads.png"),
+//   },
+// ];
 
-const brandsData = [
-  {
-    id: "1",
-    name: "Warehouse",
-    image: require("@/assets/images/brand.png"),
-  },
-  {
-    id: "2",
-    name: "Sanrio",
-    image: require("@/assets/images/brand.png"),
-  },
-  {
-    id: "3",
-    name: "GoodDay",
-    image: require("@/assets/images/brand.png"),
-  },
-  {
-    id: "4",
-    name: "Crane",
-    image: require("@/assets/images/brand.png"),
-  },
-];
+// const brandsData = [
+//   {
+//     id: "1",
+//     name: "Warehouse",
+//     image: require("@/assets/images/brand.png"),
+//   },
+//   {
+//     id: "2",
+//     name: "Sanrio",
+//     image: require("@/assets/images/brand.png"),
+//   },
+//   {
+//     id: "3",
+//     name: "GoodDay",
+//     image: require("@/assets/images/brand.png"),
+//   },
+//   {
+//     id: "4",
+//     name: "Crane",
+//     image: require("@/assets/images/brand.png"),
+//   },
+// ];
 type Props = NativeStackScreenProps<RootParams, "HomeRoute">;
+
+interface BrandModel {
+  id: number;
+  name: string;
+  logo: string;
+}
+
+interface ProductModel {
+  id: number;
+  name: string;
+  price: number;
+  rate: number;
+  discount: number;
+  quantity: number;
+  mainImg: string;
+  category: CategoryBrandModel;
+  brand: CategoryBrandModel;
+}
+
+interface CategoryBrandModel {
+  id: number;
+  name: string;
+}
+
 export default function HomeScreen({ navigation }: Props) {
   const insets = useSafeAreaInsets();
+  const [brands, setBrands] = useState<BrandModel[]>([]);
+  const [products, setProducts] = useState<ProductModel[]>([]);
+
+  const getBrands = async () => {
+    try {
+      const response = await fetch(
+        "http://oman.somee.com/ecommerce_publish/Customer/Brands",
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setBrands(data.brands);
+      } else {
+      }
+    } catch {}
+  };
+
+  const getProducts = async () => {
+    try {
+      const response = await fetch(
+        "http://oman.somee.com/ecommerce_publish/Customer/Products",
+      );
+
+      if (response.ok) {
+        setProducts(await response.json());
+      } else {
+      }
+    } catch {}
+  };
+
+  useEffect(() => {
+    getBrands();
+    getProducts();
+  }, []);
 
   return (
     <View
@@ -113,16 +171,16 @@ export default function HomeScreen({ navigation }: Props) {
               />
               <View style={styles.booksListContainer}>
                 <FlatList
-                  data={topBooksData}
+                  data={products}
                   renderItem={({ item }) => (
                     <BookCard
-                      image={item.image}
-                      title={item.title}
-                      price={item.price}
-                      onPress={() => console.log("Book:", item.title)}
+                      image={require("../../../assets/images/ads.png")}
+                      title={item.name}
+                      price={item.price.toString()}
+                      onPress={() => console.log("Book:", item.name)}
                     />
                   )}
-                  keyExtractor={(item) => item.id}
+                  keyExtractor={(item) => item.id.toString()}
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={styles.booksList}
@@ -138,14 +196,18 @@ export default function HomeScreen({ navigation }: Props) {
               />
               <View style={styles.brandsListContainer}>
                 <FlatList
-                  data={brandsData}
+                  data={brands}
                   renderItem={({ item }) => (
                     <BrandCard
-                      image={item.image}
+                      image={{
+                        uri:
+                          "http://oman.somee.com/ecommerce_publish/images/brand_logos/" +
+                          item.logo,
+                      }}
                       onPress={() => console.log("Brand:", item.name)}
                     />
                   )}
-                  keyExtractor={(item) => item.id}
+                  keyExtractor={(item) => item.id.toString()}
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={styles.brandsList}
@@ -161,16 +223,16 @@ export default function HomeScreen({ navigation }: Props) {
               />
               <View style={styles.booksListContainer}>
                 <FlatList
-                  data={topBooksData}
+                  data={products}
                   renderItem={({ item }) => (
                     <BookCard
-                      image={item.image}
-                      title={item.title}
-                      price={item.price}
-                      onPress={() => console.log("Book:", item.title)}
+                      image={require("../../../assets/images/ads.png")}
+                      title={item.name}
+                      price={item.price.toString()}
+                      onPress={() => console.log("Book:", item.name)}
                     />
                   )}
-                  keyExtractor={(item) => item.id}
+                  keyExtractor={(item) => item.id.toString()}
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={styles.booksList}
