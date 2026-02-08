@@ -1,3 +1,5 @@
+import { ProfileModel } from "@/features/profile/profile_screen";
+
 export type RootParams = {
   SplashRoute: undefined;
   OnBoardingRoute: undefined;
@@ -10,4 +12,8 @@ export type RootParams = {
   CartRoute: undefined;
   CategoryRoute: undefined;
   SearchRoute: undefined;
+  MyAccountRoute: ProfileModel;
+  FavoritesRoute: undefined;
+  OrderHistoryRoute: undefined;
+  HelpCenterRoute: undefined;
 };

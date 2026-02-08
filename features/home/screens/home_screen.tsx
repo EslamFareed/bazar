@@ -4,6 +4,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   FlatList,
   StyleSheet,
   Text,
@@ -14,6 +15,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AdsSlider from "../components/ads_view";
 import BookCard from "../components/book_card";
 import BrandCard from "../components/brand_card";
+import ProductDetailModal from "../components/product_detail_modal";
 import SectionHeader from "../components/section_header";
 
 // const topBooksData = [
@@ -88,8 +90,13 @@ export default function HomeScreen({ navigation }: Props) {
   const insets = useSafeAreaInsets();
   const [brands, setBrands] = useState<BrandModel[]>([]);
   const [products, setProducts] = useState<ProductModel[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<ProductModel | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const getBrands = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch(
         "http://oman.somee.com/ecommerce_publish/Customer/Brands",
@@ -100,10 +107,15 @@ export default function HomeScreen({ navigation }: Props) {
         setBrands(data.brands);
       } else {
       }
-    } catch {}
+    } catch {
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const getProducts = async () => {
+    setIsLoading(true);
+
     try {
       const response = await fetch(
         "http://oman.somee.com/ecommerce_publish/Customer/Products",
@@ -113,13 +125,31 @@ export default function HomeScreen({ navigation }: Props) {
         setProducts(await response.json());
       } else {
       }
-    } catch {}
+    } catch {
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
     getBrands();
     getProducts();
   }, []);
+
+  if (isLoading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <ActivityIndicator />
+        <Text>Loading....</Text>
+      </View>
+    );
+  }
 
   return (
     <View
@@ -177,7 +207,10 @@ export default function HomeScreen({ navigation }: Props) {
                       image={require("../../../assets/images/ads.png")}
                       title={item.name}
                       price={item.price.toString()}
-                      onPress={() => console.log("Book:", item.name)}
+                      onPress={() => {
+                        setSelectedProduct(item);
+                        setModalVisible(true);
+                      }}
                     />
                   )}
                   keyExtractor={(item) => item.id.toString()}
@@ -229,7 +262,10 @@ export default function HomeScreen({ navigation }: Props) {
                       image={require("../../../assets/images/ads.png")}
                       title={item.name}
                       price={item.price.toString()}
-                      onPress={() => console.log("Book:", item.name)}
+                      onPress={() => {
+                        setSelectedProduct(item);
+                        setModalVisible(true);
+                      }}
                     />
                   )}
                   keyExtractor={(item) => item.id.toString()}
@@ -245,6 +281,15 @@ export default function HomeScreen({ navigation }: Props) {
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
+      />
+
+      <ProductDetailModal
+        visible={modalVisible}
+        onClose={() => {
+          setModalVisible(false);
+          setSelectedProduct(null);
+        }}
+        product={selectedProduct}
       />
     </View>
   );
