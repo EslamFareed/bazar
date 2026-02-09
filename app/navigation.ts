@@ -1,3 +1,4 @@
+import { ProductModel } from "@/features/home/screens/home_screen";
 import { ProfileModel } from "@/features/profile/profile_screen";
 
 export type RootParams = {
@@ -16,4 +17,5 @@ export type RootParams = {
   FavoritesRoute: undefined;
   OrderHistoryRoute: undefined;
   HelpCenterRoute: undefined;
+  ProductDetailsRoute: ProductModel;
 };

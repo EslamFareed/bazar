@@ -11,13 +11,14 @@ import OrderHistoryScreen from "@/features/profile/order_history_screen";
 import SearchScreen from "@/features/search/search_screen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RootParams } from "./navigation";
+import ProductDetailModal from "@/features/home/components/product_detail_modal";
 
 const stack = createNativeStackNavigator<RootParams>();
 
 export default function App() {
   return (
     // <NavigationContainer>
-    <stack.Navigator initialRouteName="MainTabs">
+    <stack.Navigator initialRouteName="SplashRoute">
       <stack.Screen
         name="SplashRoute"
         component={SplashScreen}
@@ -91,6 +92,13 @@ export default function App() {
       <stack.Screen
         name="HelpCenterRoute"
         component={HelpCenterScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+       <stack.Screen
+        name="ProductDetailsRoute"
+        component={ProductDetailModal}
         options={{
           headerShown: false,
         }}

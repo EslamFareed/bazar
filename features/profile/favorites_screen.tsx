@@ -1,8 +1,11 @@
 import { COLORS } from "@/app/constants/app_colors";
 import { RootParams } from "@/app/navigation";
 import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useEffect, useState } from "react";
 import {
+  Alert,
   FlatList,
   Image,
   StyleSheet,
@@ -11,18 +14,33 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ProductModel } from "../home/screens/home_screen";
 
 type Props = NativeStackScreenProps<RootParams, "FavoritesRoute">;
 
-const favoritesData = [
-  { id: "1", title: "In in amet ultrices sit.", price: "$19.99" },
-  { id: "2", title: "Bibendum facilisis.", price: "$27.12" },
-  { id: "3", title: "Nulla et diam cras.", price: "$13.52" },
-  { id: "4", title: "Risus malesuada in.", price: "$31.00" },
-];
+// const favoritesData = [
+//   { id: "1", title: "In in amet ultrices sit.", price: "$19.99" },
+//   { id: "2", title: "Bibendum facilisis.", price: "$27.12" },
+//   { id: "3", title: "Nulla et diam cras.", price: "$13.52" },
+//   { id: "4", title: "Risus malesuada in.", price: "$31.00" },
+// ];
 
 export default function FavoritesScreen({ navigation }: Props) {
   const insets = useSafeAreaInsets();
+
+  const [getProducts, setProducts] = useState<ProductModel[]>([]);
+
+  const getFavs = async () => {
+    const data = await AsyncStorage.getItem("products");
+
+    if (data) {
+      setProducts(JSON.parse(data!));
+    }
+  };
+
+  useEffect(() => {
+    getFavs();
+  }, []);
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -35,19 +53,51 @@ export default function FavoritesScreen({ navigation }: Props) {
       </View>
 
       <FlatList
-        data={favoritesData}
-        keyExtractor={(item) => item.id}
+        data={getProducts}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.itemContainer}>
             <Image
-              source={require("../../assets/images/ads.png")}
+              source={{
+                uri:
+                  "http://oman.somee.com/ecommerce_publish/images/product_imgs/" +
+                  item.mainImg,
+              }}
               style={styles.itemImage}
             />
             <View style={styles.itemInfo}>
-              <Text style={styles.itemTitle}>{item.title}</Text>
+              <Text style={styles.itemTitle}>{item.name}</Text>
               <Text style={styles.itemPrice}>{item.price}</Text>
             </View>
-            <Ionicons name="heart" size={24} color={COLORS.primary} />
+            <TouchableOpacity
+              onPress={async () => {
+                const data = await AsyncStorage.getItem("products");
+                let products: ProductModel[] = [];
+                if (data) {
+                  products = JSON.parse(data!);
+                }
+
+                Alert.alert("Confirm Unfavourite", item.name, [
+                  {
+                    text: "Yes",
+                    onPress: async () => {
+                      products = products.filter((p) => p.id !== item.id);
+                      await AsyncStorage.setItem(
+                        "products",
+                        JSON.stringify(products),
+                      );
+
+                      setProducts(products);
+                    },
+                  },
+                  {
+                    text: "No",
+                  },
+                ]);
+              }}
+            >
+              <Ionicons name="heart" size={24} color={COLORS.primary} />
+            </TouchableOpacity>
           </View>
         )}
         ItemSeparatorComponent={() => <View style={styles.separator} />}

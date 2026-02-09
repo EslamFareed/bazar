@@ -15,7 +15,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AdsSlider from "../components/ads_view";
 import BookCard from "../components/book_card";
 import BrandCard from "../components/brand_card";
-import ProductDetailModal from "../components/product_detail_modal";
 import SectionHeader from "../components/section_header";
 
 // const topBooksData = [
@@ -69,7 +68,7 @@ interface BrandModel {
   logo: string;
 }
 
-interface ProductModel {
+export interface ProductModel {
   id: number;
   name: string;
   price: number;
@@ -90,8 +89,6 @@ export default function HomeScreen({ navigation }: Props) {
   const insets = useSafeAreaInsets();
   const [brands, setBrands] = useState<BrandModel[]>([]);
   const [products, setProducts] = useState<ProductModel[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<ProductModel | null>(null);
-  const [modalVisible, setModalVisible] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -204,12 +201,16 @@ export default function HomeScreen({ navigation }: Props) {
                   data={products}
                   renderItem={({ item }) => (
                     <BookCard
-                      image={require("../../../assets/images/ads.png")}
+                      image={{
+                        uri:
+                          "http://oman.somee.com/ecommerce_publish/images/product_imgs/" +
+                          item.mainImg,
+                      }}
+                      // image={require("../../../assets/images/ads.png")}
                       title={item.name}
                       price={item.price.toString()}
                       onPress={() => {
-                        setSelectedProduct(item);
-                        setModalVisible(true);
+                        navigation.navigate("ProductDetailsRoute", item);
                       }}
                     />
                   )}
@@ -259,12 +260,15 @@ export default function HomeScreen({ navigation }: Props) {
                   data={products}
                   renderItem={({ item }) => (
                     <BookCard
-                      image={require("../../../assets/images/ads.png")}
+                      image={{
+                        uri:
+                          "http://oman.somee.com/ecommerce_publish/images/product_imgs/" +
+                          item.mainImg,
+                      }}
                       title={item.name}
                       price={item.price.toString()}
                       onPress={() => {
-                        setSelectedProduct(item);
-                        setModalVisible(true);
+                        navigation.navigate("ProductDetailsRoute", item);
                       }}
                     />
                   )}
@@ -283,14 +287,14 @@ export default function HomeScreen({ navigation }: Props) {
         scrollEventThrottle={16}
       />
 
-      <ProductDetailModal
+      {/* <ProductDetailModal
         visible={modalVisible}
         onClose={() => {
           setModalVisible(false);
           setSelectedProduct(null);
         }}
         product={selectedProduct}
-      />
+      /> */}
     </View>
   );
 }
