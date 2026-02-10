@@ -4,7 +4,14 @@ import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useEffect, useState } from "react";
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Button,
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type Props = NativeStackScreenProps<RootParams, "ProfileRoute">;
@@ -159,6 +166,8 @@ export default function ProfileScreen({ navigation }: Props) {
           <Ionicons name="chevron-forward" size={20} color={COLORS.darkGray} />
         </TouchableOpacity>
       ))} */}
+
+     
 
       <Modal
         visible={showLogout}

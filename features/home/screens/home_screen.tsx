@@ -17,49 +17,6 @@ import BookCard from "../components/book_card";
 import BrandCard from "../components/brand_card";
 import SectionHeader from "../components/section_header";
 
-// const topBooksData = [
-//   {
-//     id: "1",
-//     title: "The Kite Runner",
-//     price: "$14.99",
-//     image: require("@/assets/images/ads.png"),
-//   },
-//   {
-//     id: "2",
-//     title: "The Subtle Art of Not Giving a F*ck",
-//     price: "$20.99",
-//     image: require("@/assets/images/ads.png"),
-//   },
-//   {
-//     id: "3",
-//     title: "The Art of War",
-//     price: "$14.99",
-//     image: require("@/assets/images/ads.png"),
-//   },
-// ];
-
-// const brandsData = [
-//   {
-//     id: "1",
-//     name: "Warehouse",
-//     image: require("@/assets/images/brand.png"),
-//   },
-//   {
-//     id: "2",
-//     name: "Sanrio",
-//     image: require("@/assets/images/brand.png"),
-//   },
-//   {
-//     id: "3",
-//     name: "GoodDay",
-//     image: require("@/assets/images/brand.png"),
-//   },
-//   {
-//     id: "4",
-//     name: "Crane",
-//     image: require("@/assets/images/brand.png"),
-//   },
-// ];
 type Props = NativeStackScreenProps<RootParams, "HomeRoute">;
 
 interface BrandModel {

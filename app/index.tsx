@@ -1,6 +1,7 @@
 import CreateAccountSuccessScreen from "@/features/auth/screens/ceate_account_success_screen";
 import LoginScreen from "@/features/auth/screens/login_screen";
 import RegisterScreen from "@/features/auth/screens/register_screen";
+import ProductDetailModal from "@/features/home/components/product_detail_modal";
 import MainTabs from "@/features/home/screens/main_tabs";
 import OnboardingScreen from "@/features/onboarding/screens/onboarding_screen";
 import SplashScreen from "@/features/onboarding/screens/splash_screen";
@@ -11,7 +12,6 @@ import OrderHistoryScreen from "@/features/profile/order_history_screen";
 import SearchScreen from "@/features/search/search_screen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RootParams } from "./navigation";
-import ProductDetailModal from "@/features/home/components/product_detail_modal";
 
 const stack = createNativeStackNavigator<RootParams>();
 
@@ -96,7 +96,7 @@ export default function App() {
           headerShown: false,
         }}
       />
-       <stack.Screen
+      <stack.Screen
         name="ProductDetailsRoute"
         component={ProductDetailModal}
         options={{

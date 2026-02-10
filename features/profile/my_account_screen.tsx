@@ -2,8 +2,11 @@ import { COLORS } from "@/app/constants/app_colors";
 import { RootParams } from "@/app/navigation";
 import { Ionicons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
 import {
+  Button,
+  Image,
   StyleSheet,
   Text,
   TextInput,
@@ -18,6 +21,7 @@ export default function MyAccountScreen({ navigation, route }: Props) {
   const insets = useSafeAreaInsets();
   const [name, setName] = useState(route.params.userName);
   const [email, setEmail] = useState(route.params.email);
+  const [image, setImage] = useState<string | null>(null);
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -30,6 +34,18 @@ export default function MyAccountScreen({ navigation, route }: Props) {
       </View>
 
       <View style={styles.form}>
+        {image && (
+          <Image
+            source={{ uri: image }}
+            style={{
+              marginBottom: 32,
+              width: 72,
+              height: 72,
+              borderRadius: 72,
+            }}
+          />
+        )}
+
         <Text style={styles.label}>Name</Text>
         <TextInput
           style={styles.input}
@@ -52,6 +68,41 @@ export default function MyAccountScreen({ navigation, route }: Props) {
         <TouchableOpacity style={styles.saveButton}>
           <Text style={styles.saveButtonText}>Save Changes</Text>
         </TouchableOpacity>
+
+        <Button
+          title="Choose Image"
+          onPress={async () => {
+            const result = await ImagePicker.launchCameraAsync({
+              allowsEditing: true,
+              aspect: [1, 1],
+              quality: 1,
+            });
+            // const result = await ImagePicker.launchImageLibraryAsync({
+            //   mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            //   allowsEditing: true,
+            //   aspect: [1, 1],
+            //   quality: 1,
+            // });
+            let imageUri = "";
+            if (!result.canceled) {
+              imageUri = result.assets[0].uri;
+              setImage(imageUri);
+            }
+
+            const fromData = new FormData();
+            // fromData.append("name", name);
+            // fromData.append("email", email);
+            fromData.append("image", {
+              uri: imageUri,
+              type: "image/jpeg",
+              name: "profile.jpg",
+            } as any);
+            const response = await fetch("", {
+              method: "POST",
+              body: fromData,
+            });
+          }}
+        ></Button>
       </View>
     </View>
   );
