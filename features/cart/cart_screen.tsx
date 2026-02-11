@@ -118,6 +118,14 @@ export default function CartScreen({ navigation }: Props) {
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         contentContainerStyle={styles.listContent}
       />
+
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("LocationRoute");
+        }}
+      >
+        <Text>Checkout</Text>
+      </TouchableOpacity>
     </View>
   );
 }

@@ -18,4 +18,8 @@ export type RootParams = {
   OrderHistoryRoute: undefined;
   HelpCenterRoute: undefined;
   ProductDetailsRoute: ProductModel;
+  LocationRoute: undefined;
+  ConfirmOrderRoute: {
+    location?: any;
+  };
 };

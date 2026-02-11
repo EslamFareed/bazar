@@ -1,6 +1,8 @@
 import CreateAccountSuccessScreen from "@/features/auth/screens/ceate_account_success_screen";
 import LoginScreen from "@/features/auth/screens/login_screen";
 import RegisterScreen from "@/features/auth/screens/register_screen";
+import ConfirmOrderScreen from "@/features/checkout/screens/confirm_order_screen";
+import LocationScreen from "@/features/checkout/screens/location_screen";
 import ProductDetailModal from "@/features/home/components/product_detail_modal";
 import MainTabs from "@/features/home/screens/main_tabs";
 import OnboardingScreen from "@/features/onboarding/screens/onboarding_screen";
@@ -99,6 +101,20 @@ export default function App() {
       <stack.Screen
         name="ProductDetailsRoute"
         component={ProductDetailModal}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <stack.Screen
+        name="LocationRoute"
+        component={LocationScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <stack.Screen
+        name="ConfirmOrderRoute"
+        component={ConfirmOrderScreen}
         options={{
           headerShown: false,
         }}
